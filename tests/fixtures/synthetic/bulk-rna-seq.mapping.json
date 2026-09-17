@@ -1,0 +1,51 @@
+{
+  "schema_version": "0.1-draft",
+  "name": "synthetic-bulk-rna-seq",
+  "columns": {
+    "source": [
+      "study_id"
+    ],
+    "unit": [
+      "study_id",
+      "sample_id"
+    ],
+    "group": [
+      "condition"
+    ]
+  },
+  "grain": {
+    "name": "study",
+    "description": "Synthetic contributing study, with condition crossing only in the middle study."
+  },
+  "unit_description": "A specimen-level RNA-seq sample, retaining the explicitly declared donor relationship.",
+  "weighting": {
+    "mode": "incidence"
+  },
+  "hierarchy": {
+    "donor": [
+      "study_id",
+      "donor_id"
+    ]
+  },
+  "policies": {
+    "missing_required": "error",
+    "duplicates": "error",
+    "missing_parent": "report",
+    "missing_tokens": []
+  },
+  "diagnostics": {
+    "include": [
+      "design",
+      "entropy",
+      "ceiling",
+      "structure",
+      "guards"
+    ],
+    "bootstrap_replicates": 0,
+    "seed": 0
+  },
+  "execution": {
+    "max_working_memory_mb": 512
+  }
+}
+

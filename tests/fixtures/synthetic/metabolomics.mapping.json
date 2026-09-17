@@ -1,0 +1,49 @@
+{
+  "schema_version": "0.1-draft",
+  "name": "synthetic-metabolomics",
+  "columns": {
+    "source": [
+      "study_id",
+      "batch_id"
+    ],
+    "unit": [
+      "study_id",
+      "specimen_id"
+    ],
+    "group": [
+      "condition"
+    ]
+  },
+  "grain": {
+    "name": "study_batch",
+    "description": "Joint study and acquisition-batch identifier in a synthetic resource."
+  },
+  "unit_description": "A biological specimen; individual metabolite measurements are not separate units.",
+  "weighting": {
+    "mode": "column",
+    "column": "observation_mass",
+    "description": "Artificial row-scoped mass for this weighting example only; not metabolite intensity, sequencing depth, or a dataset total."
+  },
+  "hierarchy": {},
+  "policies": {
+    "missing_required": "error",
+    "duplicates": "error",
+    "missing_parent": "report",
+    "missing_tokens": []
+  },
+  "diagnostics": {
+    "include": [
+      "design",
+      "entropy",
+      "ceiling",
+      "structure",
+      "guards"
+    ],
+    "bootstrap_replicates": 0,
+    "seed": 0
+  },
+  "execution": {
+    "max_working_memory_mb": 512
+  }
+}
+

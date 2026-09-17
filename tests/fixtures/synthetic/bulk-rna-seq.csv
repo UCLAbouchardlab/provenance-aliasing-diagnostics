@@ -1,0 +1,7 @@
+study_id,sample_id,condition,donor_id
+SYN-RNA-01,001,Control,D01
+SYN-RNA-01,002,Control,D02
+SYN-RNA-02,001,Control,D01
+SYN-RNA-02,002,Case,D01
+SYN-RNA-03,001,Case,D01
+SYN-RNA-03,002,Case,D02

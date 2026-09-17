@@ -1,0 +1,7 @@
+study_id,batch_id,specimen_id,condition,observation_mass
+SYN-MET-01,B01,001,Control,2
+SYN-MET-01,B01,002,Control,1
+SYN-MET-01,B01,003,Control,1
+SYN-MET-01,B02,004,Case,2
+SYN-MET-01,B02,005,Case,1
+SYN-MET-01,B02,006,Case,1

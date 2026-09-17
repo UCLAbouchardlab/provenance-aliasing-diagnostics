@@ -1,0 +1,9 @@
+study_id,specimen_id,condition,donor_id
+SYN-IP-01,001,Control,D01
+SYN-IP-01,002,Control,D02
+SYN-IP-01,003,Case,D03
+SYN-IP-01,004,Case,D04
+SYN-IP-02,001,Control,D01
+SYN-IP-02,002,Control,D02
+SYN-IP-02,003,Case,D03
+SYN-IP-02,004,Case,D04

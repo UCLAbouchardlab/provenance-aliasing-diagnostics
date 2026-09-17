@@ -1,0 +1,57 @@
+{
+  "schema_version": "0.1-draft",
+  "name": "synthetic-single-cell",
+  "columns": {
+    "source": [
+      "study_id",
+      "batch_id"
+    ],
+    "unit": [
+      "study_id",
+      "sample_id",
+      "barcode"
+    ],
+    "group": [
+      "cell_type"
+    ]
+  },
+  "grain": {
+    "name": "study_batch",
+    "description": "Joint synthetic study and acquisition batch, each containing all three selected cell types."
+  },
+  "unit_description": "One cell identified by study, sample, and local barcode; the cell-incidence summary does not assert independent biological replication.",
+  "weighting": {
+    "mode": "incidence"
+  },
+  "hierarchy": {
+    "sample": [
+      "study_id",
+      "sample_id"
+    ],
+    "donor": [
+      "study_id",
+      "donor_id"
+    ]
+  },
+  "policies": {
+    "missing_required": "error",
+    "duplicates": "error",
+    "missing_parent": "report",
+    "missing_tokens": []
+  },
+  "diagnostics": {
+    "include": [
+      "design",
+      "entropy",
+      "ceiling",
+      "structure",
+      "guards"
+    ],
+    "bootstrap_replicates": 0,
+    "seed": 0
+  },
+  "execution": {
+    "max_working_memory_mb": 512
+  }
+}
+

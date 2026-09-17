@@ -1,0 +1,37 @@
+name: Package checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python: ["3.11", "3.12"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install package and test dependencies
+        run: python -m pip install ".[dev,advanced,excel]"
+      - name: Run tests against installed package
+        run: python -m pytest
+      - name: Build wheel and source archive
+        run: python -m build
+      - name: Check command entry points
+        run: |
+          provenance-aliasing --version
+          python -m provenance_aliasing --help
+          python -m provenance_aliasing.api --help
+          provenance-aliasing validate tests/fixtures/synthetic/bulk-rna-seq.csv --config tests/fixtures/synthetic/bulk-rna-seq.mapping.json --output validation.json
+          provenance-aliasing diagnose tests/fixtures/synthetic/bulk-rna-seq.csv --config tests/fixtures/synthetic/bulk-rna-seq.mapping.json --output diagnostics.json --run-record run-record.json
+          provenance-aliasing verify run-record.json --metadata tests/fixtures/synthetic/bulk-rna-seq.csv --config tests/fixtures/synthetic/bulk-rna-seq.mapping.json --report diagnostics.json --output verification.json
