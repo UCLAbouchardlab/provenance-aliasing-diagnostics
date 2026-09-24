@@ -1,0 +1,7 @@
+include README.md
+include REPRODUCIBILITY.md
+include RELEASING.md
+include CITATION_METADATA_NEEDED.md
+recursive-include scripts *.py
+recursive-include tests *.py
+recursive-include tests/fixtures/synthetic *.csv *.json

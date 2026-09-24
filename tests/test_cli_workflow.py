@@ -57,8 +57,9 @@ def strict_json(text: str):
 
 
 def subprocess_cli(entry_point: str, argv: list[str], cwd: Path):
-    if entry_point == "module":
-        prefix = [sys.executable, "-B", "-m", "provenance_aliasing.api"]
+    if entry_point in ("module", "root"):
+        module = "provenance_aliasing.api" if entry_point == "module" else "provenance_aliasing"
+        prefix = [sys.executable, "-B", "-m", module]
     else:
         suffix = ".exe" if os.name == "nt" else ""
         prefix = [str(Path(sysconfig.get_path("scripts")) / f"provenance-aliasing{suffix}")]
@@ -301,7 +302,7 @@ def test_computation_failure_returns_typed_json_envelope_and_exit_three_without_
     assert payload["package"]["name"] == "provenance-aliasing-diagnostics"
 
 
-@pytest.mark.parametrize("entry_point", ["module", "console"])
+@pytest.mark.parametrize("entry_point", ["module", "console", "root"])
 def test_installed_entry_points_emit_parseable_stdout_json_outside_checkout(tmp_path, entry_point) -> None:
     metadata_path, config_path = write_inputs(tmp_path)
     completed = subprocess_cli(entry_point, ["validate", str(metadata_path), "--config", str(config_path)], tmp_path)
@@ -310,7 +311,7 @@ def test_installed_entry_points_emit_parseable_stdout_json_outside_checkout(tmp_
     assert completed.stderr
 
 
-@pytest.mark.parametrize("entry_point", ["module", "console"])
+@pytest.mark.parametrize("entry_point", ["module", "console", "root"])
 def test_installed_entry_points_have_help_version_and_friendly_no_argument_behavior(tmp_path, entry_point) -> None:
     for argv in ([], ["--help"]):
         completed = subprocess_cli(entry_point, argv, tmp_path)
