@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 import subprocess
 import sys
@@ -30,19 +31,24 @@ def test_installed_console_script_works_outside_checkout(tmp_path: Path) -> None
     assert not completed.stderr
 
 
-def test_module_help_and_unknown_command(tmp_path: Path) -> None:
+def test_root_module_exposes_and_runs_operational_cli(tmp_path: Path) -> None:
     help_result = subprocess.run(
         [sys.executable, "-m", "provenance_aliasing", "--help"],
         cwd=tmp_path, text=True, capture_output=True, check=True,
     )
-    assert "--version" in help_result.stdout
-    assert "planned" in help_result.stdout
-    invalid = subprocess.run(
-        [sys.executable, "-m", "provenance_aliasing", "diagnose"],
+    assert "{validate,diagnose,verify}" in help_result.stdout
+    assert "planned" not in help_result.stdout
+
+    fixtures = Path(__file__).resolve().parent / "fixtures" / "synthetic"
+    completed = subprocess.run(
+        [sys.executable, "-m", "provenance_aliasing", "validate",
+         str(fixtures / "bulk-rna-seq.csv"), "--config",
+         str(fixtures / "bulk-rna-seq.mapping.json"), "--quiet"],
         cwd=tmp_path, text=True, capture_output=True,
     )
-    assert invalid.returncode == 2
-    assert "unrecognized arguments" in invalid.stderr
+    assert completed.returncode == 0
+    assert json.loads(completed.stdout)["valid"] is True
+    assert not completed.stderr
 
 
 def test_import_and_help_do_not_load_optional_or_numerical_modules(tmp_path: Path) -> None:

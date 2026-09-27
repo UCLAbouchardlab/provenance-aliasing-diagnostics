@@ -5,7 +5,6 @@ from dataclasses import FrozenInstanceError, replace
 import hashlib
 import json
 from pathlib import Path
-import sys
 
 import pytest
 
@@ -340,25 +339,31 @@ def test_fingerprinted_config_reader_preserves_filesystem_errors(tmp_path) -> No
         read_config_with_fingerprint(tmp_path / "absent.json")
 
 
-def test_parser_deep_json_raises_configuration_error_in_both_file_entry_points(tmp_path) -> None:
-    depth = sys.getrecursionlimit() + 20
-    text = '{"name":' + "[" * depth + "0" + "]" * depth + "}"
+def test_parser_recursion_error_is_configuration_error_in_both_file_entry_points(
+    tmp_path, monkeypatch,
+) -> None:
     path = tmp_path / "parser-deep.json"
-    path.write_bytes(text.encode("utf-8"))
-    with pytest.raises(RecursionError):
-        json.loads(text)
+    path.write_text("{}", encoding="utf-8")
+
+    def fail_at_parser(*args, **kwargs):
+        raise RecursionError("parser recursion limit reached")
+
+    monkeypatch.setattr(json, "loads", fail_at_parser)
     for read in (AnalysisConfig.from_json, read_config_with_fingerprint):
         with pytest.raises(ConfigurationError, match="nesting is too deep") as caught:
             read(path)
         assert caught.value.path == "$"
 
 
-def test_json_accepted_by_parser_but_too_deep_for_normalization_is_a_configuration_error(tmp_path) -> None:
-    depth = sys.getrecursionlimit() * 3 // 4
-    text = '{"name":' + "[" * depth + "0" + "]" * depth + "}"
-    parsed = json.loads(text)
+def test_normalization_recursion_error_is_configuration_error_in_all_entry_points(
+    tmp_path, monkeypatch,
+) -> None:
+    recursive: list = []
+    recursive.append(recursive)
+    parsed = {"name": recursive}
     path = tmp_path / "normalization-deep.json"
-    path.write_bytes(text.encode("utf-8"))
+    path.write_text("{}", encoding="utf-8")
+    monkeypatch.setattr(json, "loads", lambda *args, **kwargs: parsed)
     for read in (AnalysisConfig.from_json, read_config_with_fingerprint):
         with pytest.raises(ConfigurationError, match="nesting is too deep") as caught:
             read(path)

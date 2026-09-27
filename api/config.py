@@ -98,6 +98,8 @@ def _construct(cls: type[T], value: Any, path: str) -> T:
 
 @dataclass(frozen=True, slots=True)
 class ColumnMapping:
+    """Metadata columns that identify sources, analysis units, and groups."""
+
     source: tuple[str, ...]
     unit: tuple[str, ...]
     group: tuple[str, ...]
@@ -109,6 +111,8 @@ class ColumnMapping:
 
 @dataclass(frozen=True, slots=True)
 class ProvenanceGrain:
+    """Name and scientific description of the declared provenance grain."""
+
     name: str
     description: str
 
@@ -119,6 +123,8 @@ class ProvenanceGrain:
 
 @dataclass(frozen=True, slots=True)
 class WeightingConfig:
+    """Incidence or column-based weighting used by the analysis."""
+
     mode: str = "incidence"
     column: str | None = None
     description: str | None = None
@@ -137,6 +143,8 @@ class WeightingConfig:
 
 @dataclass(frozen=True, slots=True)
 class ValidationPolicies:
+    """Policies for missing values, duplicates, and hierarchy parents."""
+
     missing_required: str = "error"
     duplicates: str = "error"
     missing_parent: str = "report"
@@ -153,6 +161,8 @@ class ValidationPolicies:
 
 @dataclass(frozen=True, slots=True)
 class DiagnosticSelection:
+    """Requested diagnostic families and reproducible bootstrap settings."""
+
     include: tuple[str, ...] = _DEFAULT_DIAGNOSTICS
     bootstrap_replicates: int = 0
     seed: int = 0
@@ -167,6 +177,8 @@ class DiagnosticSelection:
 
 @dataclass(frozen=True, slots=True)
 class ExecutionConfig:
+    """Resource budget applied to diagnostic working-memory estimates."""
+
     max_working_memory_mb: int = 512
 
     def __post_init__(self) -> None:
