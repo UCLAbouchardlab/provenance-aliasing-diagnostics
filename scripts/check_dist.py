@@ -19,6 +19,9 @@ def main() -> None:
         required.add(readme)
     elif isinstance(readme, dict) and "file" in readme:
         required.add(readme["file"])
+    required.update(path.relative_to(root).as_posix()
+                    for path in (root / "docs" / "figures").rglob("*")
+                    if path.is_file() and path.suffix in {".pdf", ".png"})
     required.update(str(path.relative_to(root)).replace("\\", "/")
                     for path in (root / "tests").rglob("*")
                     if path.suffix in {".py", ".csv", ".json"})

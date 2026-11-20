@@ -1,2 +1,4 @@
+include README.md
+recursive-include docs/figures *.pdf *.png
 recursive-include scripts *.py
 recursive-include tests *.py *.csv *.json
