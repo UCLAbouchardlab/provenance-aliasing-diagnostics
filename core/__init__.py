@@ -1,8 +1,6 @@
-"""Development APIs for metadata-based provenance-aliasing diagnostics.
+"""Metadata-based diagnostics of provenance and group-label aliasing.
 
-Exports retain their reference names during migration. Imports are lazy so package
-information does not load numerical or optional dependencies. Each name has one
-explicit owner; an installation failure is never hidden by searching other modules.
+Numerical and optional dependencies are imported only when required.
 """
 
 from __future__ import annotations

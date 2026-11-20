@@ -1,4 +1,4 @@
-"""Regressions for input integrity and structured identifiers during migration."""
+"""Regression tests for input integrity and structured identifiers."""
 from __future__ import annotations
 
 from dataclasses import replace

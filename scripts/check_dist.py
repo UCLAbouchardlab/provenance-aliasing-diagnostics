@@ -2,6 +2,7 @@
 from pathlib import Path
 import sys
 import tarfile
+import tomllib
 import zipfile
 
 
@@ -11,8 +12,13 @@ def main() -> None:
     wheels = list(directory.glob("*.whl"))
     archives = list(directory.glob("*.tar.gz"))
     assert len(wheels) == len(archives) == 1, "expected one wheel and one sdist"
-    required = {"README.md", "REPRODUCIBILITY.md", "RELEASING.md", "pyproject.toml",
-                "MANIFEST.in", "CITATION_METADATA_NEEDED.md"}
+    required = {"pyproject.toml", "MANIFEST.in"}
+    project = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))["project"]
+    readme = project.get("readme")
+    if isinstance(readme, str):
+        required.add(readme)
+    elif isinstance(readme, dict) and "file" in readme:
+        required.add(readme["file"])
     required.update(str(path.relative_to(root)).replace("\\", "/")
                     for path in (root / "tests").rglob("*")
                     if path.suffix in {".py", ".csv", ".json"})

@@ -1,8 +1,4 @@
-"""Cross-omics acceptance fixtures mapped through the current reference API.
-
-The JSON configuration remains a design draft, so this test maps its explicit
-roles to today's constructor rather than claiming the future API is implemented.
-"""
+"""Cross-omics fixtures checked against analytical expectations using the core API."""
 from __future__ import annotations
 
 import json
@@ -59,8 +55,7 @@ def test_synthetic_omics_metadata_matches_analytical_expectations(example) -> No
             ceiling["value"], rel=0, abs=EXPECTED["absolute_tolerance"],
         )
     else:
-        # Today's numerical API raises; the future orchestrator will report the
-        # not_applicable status specified in the design fixture.
+        # The core API raises when the ceiling is not applicable.
         with pytest.raises(ValueError, match="two-group"):
             balanced_accuracy_ceiling(corpus)
     structure = structural_leave_one_source_out(corpus)

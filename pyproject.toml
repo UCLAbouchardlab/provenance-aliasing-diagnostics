@@ -6,9 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "provenance-aliasing-diagnostics"
 version = "0.1.0.dev0"
 description = "Metadata-based diagnostics of provenance and group-label aliasing."
-readme = "README.md"
 requires-python = ">=3.11"
-# MIT selected; add license/license-files after Louis supplies LICENSE.
 dependencies = [
   "numpy>=1.25,<3",
   "pandas>=2.0,<3",
